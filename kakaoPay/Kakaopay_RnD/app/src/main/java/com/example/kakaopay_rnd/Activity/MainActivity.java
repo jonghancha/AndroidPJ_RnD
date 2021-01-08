@@ -8,6 +8,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -38,12 +39,13 @@ public class MainActivity extends AppCompatActivity {
 
         // IP 주소 적용
         macIP = ShareVar.IpAddress;
+        urlAddr = "https://kapi.kakao.com/v1/payment/ready";
+
         // 해쉬 키 구하기
         getHashKey();
 
         // 카카오페이로 결제 버튼
         btnKakaoPay = findViewById(R.id.btn_kakao_pay);
-
         btnKakaoPay.setOnClickListener(mClickListener);
 
 
@@ -79,28 +81,38 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_kakao_pay:
-                    connectGetData();
+
+
+                    String result = connectGetData();
+                    if(result.equals("1")){
+                        Toast.makeText(MainActivity.this,  "결제가 완료 되었습니다.", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(MainActivity.this, "결제가 실패 했습니다. !", Toast.LENGTH_SHORT).show();
+                    }
             }
         }
     };
     // 네트워크 테스크
-    private void connectGetData(){
+    private String connectGetData(){
+        String result = null;
         try {
 
             KakaoPayNetworkTask kakaoPayNetworkTask = new KakaoPayNetworkTask(MainActivity.this, urlAddr, requestData);
             ///////////////////////////////////////////////////////////////////////////////////////
 
-            Object obj = networkTask.execute().get();
-            members = (ArrayList<Student>) obj;
-            Log.v(TAG, "members.size() : " + members.size());
-
-            adapter = new StudentAdapter(SelectAllActivity.this, R.layout.student_layout, members);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener(onItemClickListener);
-            listView.setOnItemLongClickListener(onItemLongClickListener);
+            Object obj = kakaoPayNetworkTask.execute().get();
+            result = (String) obj;
+//            members = (ArrayList<Student>) obj;
+//            Log.v(TAG, "members.size() : " + members.size());
+//
+//            adapter = new StudentAdapter(SelectAllActivity.this, R.layout.student_layout, members);
+//            listView.setAdapter(adapter);
+//            listView.setOnItemClickListener(onItemClickListener);
+//            listView.setOnItemLongClickListener(onItemLongClickListener);
         }catch (Exception e){
             e.printStackTrace();
         }
+        return result;
     }
 
 
