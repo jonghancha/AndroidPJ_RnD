@@ -2,7 +2,6 @@ package com.android.firstpagead;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.content.SharedPreferences;
@@ -21,6 +20,7 @@ import java.util.Date;
 
 public class MyDialogFragment extends DialogFragment {
 
+    // 광고 다이얼로그
     // 광고 끄기 버튼
     ImageView ivAdClose;
 
@@ -52,7 +52,7 @@ public class MyDialogFragment extends DialogFragment {
         SPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 
-        return inflater.inflate(R.layout.activity_my_dialog_fragment, container, false);
+        return inflater.inflate(R.layout.dialog_frmt_ad, container, false);
 
     }
 
